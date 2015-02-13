@@ -1,4 +1,4 @@
-require 'cov' if ENV['COLLECTION']
+require 'cov_rspec' if ENV['COLLECTION']
 require 'my_thing'
 
 describe Whatever do
