@@ -10,6 +10,10 @@ describe Whatever do
     @thing.bar
   end
 
+  it 'bars again' do
+    @thing.bar
+  end
+
   it 'baz' do
     @thing.baz
   end

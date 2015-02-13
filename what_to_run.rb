@@ -45,11 +45,7 @@ def diff before, after
   end
 end
 
-cov_map = Hash.new { |h, file|
-  h[file] = Hash.new { |i, line|
-    i[line] = []
-  }
-}
+cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
 
 File.open('run_log.json') do |f|
   # Read in the coverage info
