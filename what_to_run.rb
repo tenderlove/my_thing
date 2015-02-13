@@ -1,24 +1,24 @@
-require 'rugged'
-require 'set'
 require 'json'
 require 'shellwords'
+
+require 'rugged'
+require 'set'
 
 repo = Rugged::Repository.new '.'
 lines_to_run = Set.new
 
 repo.index.diff.each_patch { |patch|
-  delta = patch.delta
-  file = delta.old_file[:path]
+  file = patch.delta.old_file[:path]
 
   patch.each_hunk { |hunk|
     hunk.each_line { |line|
-      if line.line_origin == :addition
-        line = if line.new_lineno == -1
-                 line.old_lineno
-               else
-                 line.new_lineno
-               end
-        lines_to_run << [file, line]
+      case line.line_origin
+      when :addition
+        lines_to_run << [file, line.new_lineno]
+      when :deletion
+        lines_to_run << [file, line.old_lineno]
+      when :context
+        # do nothing
       end
     }
   }
@@ -45,9 +45,8 @@ cov_map = Hash.new { |h, file|
   }
 }
 
-File.open('run_log.txt') do |f|
-  f.each_line do |line|
-    desc, before, after = JSON.parse line
+File.open('run_log.json') do |f|
+  JSON.parse(f.read).each do |desc, before, after|
     delta = diff before, after
 
     delta.each_pair do |file, lines|
