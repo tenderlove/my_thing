@@ -50,9 +50,9 @@ cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
 File.open('run_log.json') do |f|
   # Read in the coverage info
   JSON.parse(f.read).each do |args|
-    if args.length == 4
+    if args.length == 4 # for Minitest
       desc = args.first(2).join('#')
-    else
+    else                # for RSpec
       desc = args.first
     end
 
@@ -60,7 +60,6 @@ File.open('run_log.json') do |f|
 
     # calculate the per test coverage
     delta = diff before, after
-    p delta
 
     delta.each_pair do |file, lines|
       file_map = cov_map[file]
@@ -77,6 +76,7 @@ File.open('run_log.json') do |f|
   end
 end
 
+puts "you need to run"
 lines_to_run.each do |file, line|
   cov_map[File.expand_path(file)][line].each do |desc|
     puts desc
