@@ -1,0 +1,16 @@
+require 'cov'
+require 'my_thing'
+
+describe Whatever do
+  before :each do
+    @thing = Whatever.new
+  end
+
+  it 'bars' do
+    @thing.bar
+  end
+
+  it 'baz' do
+    @thing.baz
+  end
+end
