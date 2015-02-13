@@ -47,7 +47,7 @@ cov_map = Hash.new { |h, file|
 
 File.open('run_log.txt') do |f|
   f.each_line do |line|
-    klass, method, before, after = JSON.parse line
+    desc, before, after = JSON.parse line
     delta = diff before, after
 
     delta.each_pair do |file, lines|
@@ -55,15 +55,14 @@ File.open('run_log.txt') do |f|
 
       lines.each_with_index do |val, i|
         next unless val && val > 0
-        file_map[i + 1] << [klass, method]
+        file_map[i + 1] << desc
       end
     end
   end
 end
 
-res = lines_to_run.flat_map do |file, line|
-  cov_map[File.expand_path(file)][line].map do |klass, method|
-    "#{klass}##{method}"
+lines_to_run.each do |file, line|
+  cov_map[File.expand_path(file)][line].each do |desc|
+    puts desc
   end
 end
-puts Shellwords.escape("/#{res.join('|')}/")
