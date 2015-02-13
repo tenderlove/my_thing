@@ -4,10 +4,10 @@ class Whatever
   end
 
   def bar
-    "asoetae #{@foo}"
+    "bar #{@foo}"
   end
 
   def baz
-    "asoetae #{@foo}"
+    "baz #{@foo}"
   end
 end
