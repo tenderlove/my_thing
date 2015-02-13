@@ -49,10 +49,18 @@ cov_map = Hash.new { |h, file| h[file] = Hash.new { |i, line| i[line] = [] } }
 
 File.open('run_log.json') do |f|
   # Read in the coverage info
-  JSON.parse(f.read).each do |desc, before, after|
+  JSON.parse(f.read).each do |args|
+    if args.length == 4
+      desc = args.first(2).join('#')
+    else
+      desc = args.first
+    end
+
+    before, after = args.last(2)
 
     # calculate the per test coverage
     delta = diff before, after
+    p delta
 
     delta.each_pair do |file, lines|
       file_map = cov_map[file]
