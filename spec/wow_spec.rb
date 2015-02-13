@@ -1,4 +1,4 @@
-require 'cov'
+require 'cov' if ENV['COLLECTION']
 require 'my_thing'
 
 describe Whatever do
